@@ -13,9 +13,4 @@
     <ProjectReference Include="..\BookShelf.Domain\BookShelf.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Common\" />
-    <Folder Include="Settings\" />
-  </ItemGroup>
-
 </Project>

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using BookShelf.ViewModels.Windows;
 using BookShelf.Views.Factories;
 
@@ -8,20 +9,29 @@ namespace BookShelf.Views.Windows
     {
         private readonly Dictionary<IWindowViewModel, IWindow> _viewModelToWindowMap = new();
         private readonly IWindowFactory _windowFactory;
+        private readonly Dictionary<IWindow, IWindowViewModel> _windowToViewModelMap = new();
 
         public WindowManager(IWindowFactory windowFactory)
         {
             _windowFactory = windowFactory;
         }
 
-        public IWindow Show<TWindowViewModel>(TWindowViewModel viewModel)
+        public IWindow<TWindowViewModel> Show<TWindowViewModel>(TWindowViewModel viewModel, bool isModal = false)
             where TWindowViewModel : IWindowViewModel
         {
             var window = _windowFactory.Create(viewModel);
 
             _viewModelToWindowMap.Add(viewModel, window);
+            _windowToViewModelMap.Add(window, viewModel);
 
-            window.Show();
+            window.Closed += OnWindowClosed;
+
+            viewModel.BeforeWindowShown();
+
+            if (isModal)
+                window.ShowDialog();
+            else
+                window.Show();
 
             return window;
         }
@@ -30,11 +40,23 @@ namespace BookShelf.Views.Windows
             where TWindowViewModel : IWindowViewModel
         {
             if (_viewModelToWindowMap.TryGetValue(viewModel, out var window))
-            {
                 window.Close();
+        }
 
-                _viewModelToWindowMap.Remove(viewModel);
-            }
+        private void OnWindowClosed(object? sender, EventArgs e)
+        {
+            if (sender is not IWindow<IWindowViewModel> window)
+                return;
+
+            window.Closed -= OnWindowClosed;
+
+            if (!_windowToViewModelMap.TryGetValue(window, out var viewModel))
+                return;
+
+            viewModel.AfterWindowClosed();
+
+            _windowToViewModelMap.Remove(window);
+            _viewModelToWindowMap.Remove(viewModel);
         }
     }
 }

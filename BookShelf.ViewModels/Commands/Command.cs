@@ -5,16 +5,18 @@ namespace BookShelf.ViewModels.Commands
 {
     public class Command : ICommand
     {
+        private readonly Func<bool> _canExecute;
         private readonly Action _execute;
 
-        public Command(Action execute)
+        public Command(Action execute, Func<bool> canExecute = null)
         {
             _execute = execute;
+            _canExecute = canExecute;
         }
 
         public bool CanExecute(object? parameter)
         {
-            return true;
+            return _canExecute?.Invoke() ?? true;
         }
 
         public void Execute(object? parameter)
@@ -23,5 +25,10 @@ namespace BookShelf.ViewModels.Commands
         }
 
         public event EventHandler? CanExecuteChanged;
+
+        public void InvokeCanExecuteChanged()
+        {
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+        }
     }
 }

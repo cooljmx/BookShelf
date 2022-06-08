@@ -12,10 +12,4 @@
     <ProjectReference Include="..\BookShelf.Domain\BookShelf.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="MainWindow\" />
-    <Folder Include="Commands\" />
-    <Folder Include="Windows\" />
-  </ItemGroup>
-
 </Project>

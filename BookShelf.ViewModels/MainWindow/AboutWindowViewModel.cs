@@ -1,4 +1,5 @@
 ﻿using BookShelf.Domain.Settings;
+using BookShelf.ViewModels.Windows;
 
 namespace BookShelf.ViewModels.MainWindow
 {

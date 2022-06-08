@@ -1,9 +1,8 @@
 ﻿using BookShelf.Domain.Settings;
-using BookShelf.ViewModels.Windows;
 
-namespace BookShelf.ViewModels.MainWindow
+namespace BookShelf.ViewModels.Windows
 {
-    public abstract class WindowViewModel<TWindowMementoWrapper> : IWindowViewModel
+    public abstract class WindowViewModel<TWindowMementoWrapper> : ViewModel, IWindowViewModel
         where TWindowMementoWrapper : class, IWindowMementoWrapper
     {
         private readonly TWindowMementoWrapper _windowMementoWrapper;
@@ -41,6 +40,14 @@ namespace BookShelf.ViewModels.MainWindow
         {
             get => _windowMementoWrapper.IsMaximized;
             set => _windowMementoWrapper.IsMaximized = value;
+        }
+
+        public virtual void BeforeWindowShown()
+        {
+        }
+
+        public virtual void AfterWindowClosed()
+        {
         }
     }
 }

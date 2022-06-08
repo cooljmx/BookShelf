@@ -2,5 +2,7 @@
 {
     public interface IWindowViewModel
     {
+        void BeforeWindowShown();
+        void AfterWindowClosed();
     }
 }
