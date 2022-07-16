@@ -1,7 +1,9 @@
 ﻿using Autofac;
+using BookShelf.Domain.DispatcherTimer;
 using BookShelf.Domain.Settings;
 using BookShelf.Domain.Version;
 using BookShelf.Infrastructure.Common;
+using BookShelf.Infrastructure.DispatcherTimer;
 using BookShelf.Infrastructure.Settings;
 using BookShelf.Infrastructure.Version;
 
@@ -29,5 +31,6 @@ public class RegistrationModule : Module
             .SingleInstance();
 
         builder.RegisterType<ApplicationVersionProvider>().As<IApplicationVersionProvider>().SingleInstance();
+        builder.RegisterType<DispatcherTimerFactory>().As<IDispatcherTimerFactory>().SingleInstance();
     }
 }
